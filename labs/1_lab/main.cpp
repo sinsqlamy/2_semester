@@ -1,54 +1,39 @@
+#include <SFML/Graphics.hpp>
+#include "animation.h"
 #include <iostream>
-#include <thread>
-#include <animation.h>
 
-void textOutput(const animatedText& obj){
+int main() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Lab_1");
-    sf::Text SFMLText;
     sf::Font mainFont;
-    if (mainFont.loadFromFile("..\\ext\\font\\GoogleSans-Regular.ttf")){
-        SFMLText.setFont(mainFont);
-        SFMLText.setCharacterSize(20);
-        SFMLText.setFillColor(sf::Color::Black);
-        SFMLText.setStyle(sf::Text::Regular);
-        SFMLText.setPosition(0,0);
+    sf::Text textObject;
+    if (!mainFont.loadFromFile("ext/font/GoogleSans-Regular.ttf")) {
+        std::cout << "Failed to load font" << std::endl;
+        return -1;
     }
-    else{
-        std::cout << "FontUploadFail" << std::endl;
-    }
-    unsigned short index = 0;
-    std::string tempText;
-    while (window.isOpen())
-    {
+
+    AnimatedText text("Hello, world!", 13);
+    textObject.setFont(mainFont);
+    textObject.setCharacterSize(20);
+    textObject.setFillColor(sf::Color::Black);
+    textObject.setStyle(sf::Text::Regular);
+    textObject.setPosition(0, 0);
+
+    sf::Clock t;
+
+    while (window.isOpen()) {
         sf::Event event;
-        while (window.pollEvent(event))
-        {
+        while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 window.close();
         }
 
+        std::string s = text.getText(t.getElapsedTime().asSeconds());
+        textObject.setString(s);
+
         window.clear(sf::Color::White);
-        if (index < obj.getText().length()){
-            for (int i = 0; i <= index; i++){
-                tempText += obj.getText()[i];
-            }
-            SFMLText.setString(tempText);
-            tempText = "";
-            index++;
-        }
-        else{
-            std::this_thread::sleep_for(std::chrono::seconds(1));
-            break;
-        }
-        std::this_thread::sleep_for(std::chrono::microseconds(obj.getInterval()));
-        window.draw(SFMLText);
+        window.draw(textObject);
         window.display();
     }
-}
 
-int main() {
-    setlocale(LC_ALL, "Rus");
-    animatedText test(10, "Hello!");
-    textOutput(test);
     return 0;
 }

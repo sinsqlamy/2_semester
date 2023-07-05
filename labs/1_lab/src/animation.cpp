@@ -1,21 +1,14 @@
-#include <animation.h>
-#include <iostream>
+#include "animation.h"
 
-#include <utility>
-
-
-animatedText::animatedText(unsigned int duration, const std::string& text){
-    m_duration = duration;
-    // std::move насколько я понял, перемещает вместо копирования,
-    // что в данном случае выгоднее
-    m_text = std::move(text);
-    m_interval = (m_text.length() * 1000000) / m_duration;
+AnimatedText::AnimatedText(const std::string& text, unsigned int duration)
+    : m_text(text), m_duration(duration) {
+    m_interval = m_duration * 1000000 / m_text.length();
 }
 
-unsigned int animatedText::getInterval() const {
-    return m_interval;
-}
+std::string AnimatedText::getText(double time) {
+    if (static_cast<int>(time) < m_text.length()) {
+        m_displayedText = m_text.substr(0, static_cast<int>(time));
+    }
 
-std::string animatedText::getText() const {
-    return m_text;
+    return m_displayedText;
 }

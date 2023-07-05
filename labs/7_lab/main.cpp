@@ -1,12 +1,22 @@
 #include <iostream>
 #include <shape.h>
+#include <vector>
+#include <string>
+#include <cmath>
 
 int main() {
-    Circle test("0", 0, 0, 10);
-    std::cout << test.getArea() << std::endl;
-    Rectangle test2("white", 0, 0, 1, 2);
-    std::cout << test2.getArea() << std::endl;
-    Triangle test3("1", 0, 0, 10, 20, 30);
-    std::cout << test3.getArea() << std::endl;
+    std::vector<Shape*> shapes;
+
+    shapes.push_back(new Circle("Red", 0, 0, 5.0));
+    shapes.push_back(new Triangle("Blue", 1, 1, 3.0, 4.0, 5.0));
+    shapes.push_back(new Rectangle("Green", 2, 2, 4.0, 6.0));
+
+    for (const auto& shape : shapes) {
+        std::cout << "Area: " << shape->getArea() << std::endl;
+        delete shape;
+    }
+
+    shapes.clear();
+
     return 0;
 }

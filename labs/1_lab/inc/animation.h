@@ -1,14 +1,14 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include <chrono>
 
-class animatedText{
+class AnimatedText {
 private:
+    std::string m_text;
     unsigned int m_duration;
     unsigned int m_interval;
-    std::string m_text;
+    std::string m_displayedText;
+
 public:
-    animatedText(unsigned int duration, const std::string& text);
-    [[nodiscard]] unsigned int getInterval() const;
-    [[nodiscard]] std::string getText() const;
+    AnimatedText(const std::string& text, unsigned int duration);
+    std::string getText(double time);
 };
